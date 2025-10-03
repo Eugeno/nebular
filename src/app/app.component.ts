@@ -7,15 +7,14 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { NB_DOCUMENT } from '@nebular/theme';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, fromEvent, Observable, Subject, take, takeUntil } from 'rxjs';
 import { ComponentsListService } from './components-list.service';
 import { ComponentLink } from './playground-components';
 
 @Component({
-    selector: 'npg-app-root',
-    styleUrls: ['./app.component.scss'],
-    template: `
+  selector: 'npg-app-root',
+  styleUrls: ['./app.component.scss'],
+  template: `
     <div class="toolbar" [class.tools-visible]="showToolbar" dir="ltr">
       <button (click)="toggleToolbar()" [class.toolbar-toggle-fixed]="!showToolbar" class="toolbar-toggle">
         {{ showToolbar ? 'hide' : 'show' }} toolbar
@@ -47,7 +46,7 @@ import { ComponentLink } from './playground-components';
     </div>
     <router-outlet></router-outlet>
   `,
-    standalone: false
+  standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();

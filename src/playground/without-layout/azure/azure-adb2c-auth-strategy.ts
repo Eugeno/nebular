@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, of, switchMap, catchError } from 'rxjs';
 
 import {
   NbOAuth2AuthStrategy,
@@ -13,10 +11,8 @@ import {
   NbAuthIllegalTokenError,
 } from '@nebular/auth';
 
-
 // Create new token for Azure auth so it returns id_token instead of access_token
 export class AuthAzureToken extends NbAuthOAuth2JWTToken {
-
   // let's rename it to exclude name clashes
   static NAME = 'nb:auth:azure:token';
 
@@ -27,7 +23,6 @@ export class AuthAzureToken extends NbAuthOAuth2JWTToken {
 
 @Injectable()
 export class AzureADB2CAuthStrategy extends NbOAuth2AuthStrategy {
-
   // we need this method for strategy setup
   static setup(options: NbOAuth2AuthStrategyOptions): [NbAuthStrategyClass, NbOAuth2AuthStrategyOptions] {
     return [AzureADB2CAuthStrategy, options];
@@ -42,13 +37,8 @@ export class AzureADB2CAuthStrategy extends NbOAuth2AuthStrategy {
           }
 
           return of(
-            new NbAuthResult(
-              false,
-              params,
-              this.getOption('redirect.failure'),
-              this.getOption('defaultErrors'),
-              [],
-            ));
+            new NbAuthResult(false, params, this.getOption('redirect.failure'), this.getOption('defaultErrors'), []),
+          );
         }),
       );
     },
@@ -56,7 +46,7 @@ export class AzureADB2CAuthStrategy extends NbOAuth2AuthStrategy {
       const module = 'authorize';
       const requireValidToken = this.getOption(`${module}.requireValidToken`);
       return of(this.route.snapshot.fragment).pipe(
-        map(fragment => this.parseHashAsQueryParams(fragment)),
+        map((fragment) => this.parseHashAsQueryParams(fragment)),
         map((params: any) => {
           if (!params.error) {
             return new NbAuthResult(
@@ -65,7 +55,8 @@ export class AzureADB2CAuthStrategy extends NbOAuth2AuthStrategy {
               this.getOption('redirect.success'),
               [],
               this.getOption('defaultMessages'),
-              this.createToken(params, requireValidToken));
+              this.createToken(params, requireValidToken),
+            );
           }
           return new NbAuthResult(
             false,
@@ -75,32 +66,25 @@ export class AzureADB2CAuthStrategy extends NbOAuth2AuthStrategy {
             [],
           );
         }),
-        catchError(err => {
+        catchError((err) => {
           const errors = [];
           if (err instanceof NbAuthIllegalTokenError) {
             errors.push(err.message);
           } else {
             errors.push('Something went wrong.');
           }
-          return of(
-            new NbAuthResult(
-              false,
-              err,
-              this.getOption('redirect.failure'),
-              errors,
-            ));
+          return of(new NbAuthResult(false, err, this.getOption('redirect.failure'), errors));
         }),
       );
     },
   };
-
 
   protected redirectResults: any = {
     [NbOAuth2ResponseType.CODE]: () => of(null),
 
     id_token: () => {
       return of(this.route.snapshot.fragment).pipe(
-        map(fragment => this.parseHashAsQueryParams(fragment)),
+        map((fragment) => this.parseHashAsQueryParams(fragment)),
         map((params: any) => !!(params && (params.id_token || params.error))),
       );
     },

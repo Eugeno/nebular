@@ -5,14 +5,13 @@
  */
 
 import { Component, OnDestroy } from '@angular/core';
-import { NbAuthResult, NbAuthService, NbAuthToken } from '@nebular/auth';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { NbAuthService, NbAuthToken } from '@nebular/auth';
+import { takeUntil, Subject } from 'rxjs';
 import { AuthAzureToken } from './azure-adb2c-auth-strategy';
 
 @Component({
-    selector: 'nb-playground-azure',
-    template: `
+  selector: 'nb-playground-azure',
+  template: `
     <nb-layout>
       <nb-layout-column>
         <nb-card>
@@ -27,7 +26,7 @@ import { AuthAzureToken } from './azure-adb2c-auth-strategy';
       </nb-layout-column>
     </nb-layout>
   `,
-    standalone: false
+  standalone: false,
 })
 export class AzureLoginComponent implements OnDestroy {
   token: AuthAzureToken;
@@ -50,14 +49,14 @@ export class AzureLoginComponent implements OnDestroy {
     this.authService
       .authenticate('azure')
       .pipe(takeUntil(this.destroy$))
-      .subscribe((authResult: NbAuthResult) => {});
+      .subscribe(() => {});
   }
 
   logout() {
     this.authService
       .logout('azure')
       .pipe(takeUntil(this.destroy$))
-      .subscribe((authResult: NbAuthResult) => {});
+      .subscribe(() => {});
   }
 
   ngOnDestroy(): void {

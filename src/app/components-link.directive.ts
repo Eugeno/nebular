@@ -1,11 +1,10 @@
 import { OnInit, ChangeDetectorRef, Directive, ElementRef, HostBinding, Input, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, Subject, takeUntil } from 'rxjs';
 import { ComponentsListService } from './components-list.service';
 
 @Directive({
-    selector: '[npgComponentLink]',
-    standalone: false
+  selector: '[npgComponentLink]',
+  standalone: false,
 })
 export class ComponentLinkDirective implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
